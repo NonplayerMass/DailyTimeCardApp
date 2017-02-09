@@ -99,7 +99,7 @@ begin
   ftimeTime.startDate := System.SysUtils.GetTime;
   AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
 end;
-
+//
 procedure TForm1.DiaryButtonClick(Sender: TObject);
 var
   wFile: TFileStream;
@@ -129,6 +129,67 @@ begin
 //    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
 
 end;
+
+//procedure TForm1.DiaryButtonClick(Sender: TObject);
+//var
+//  LCmdText   : String;
+//  LParams    : String;
+//  LhInstance : Cardinal;
+//  LBodyText  : String;
+//begin
+//  LBodyText := 'メール新規作成 ? と %26 と改行文字には注意' + '%0D%0A'
+//             + 'サンプルプログラムです';
+//  LCmdText := 'mailto:'+LBodyText;
+//  LParams  := '';
+//
+//  LhInstance := ShellExecute(Handle,
+//                             'open',
+//                             PChar(LCmdText),
+//                             PChar(LParams),
+//                             nil,
+//                             SW_SHOW);
+////  if LhInstance <= 32 then begin
+////    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
+//
+//end;
+
+//procedure TForm1.DiaryButtonClick(Sender: TObject);
+//var
+//  tf : TextFile;
+//  s : String;
+//  ssum : String;
+//  LCmdText   : String;
+//  LParams    : String;
+//  LhInstance : Cardinal;
+//begin
+//  AssignFile(tf, '.\\mailtostr.txt');
+//  Reset(tf);
+//  ssum := '';
+//  s := '';
+//  while not Eof(tf) do
+//  begin
+//    Readln(tf, s);
+//    ssum := ssum + sLineBreak + s;
+//  end;
+////  try
+////    Memo1.Lines.LoadFromStream(wFile);
+////    s := Memo1.Lines.Text;
+////  finally
+////    wFile.Free;
+////  end;
+//  LCmdText := 'mailto:'+ssum;
+//  LParams  := '';
+//
+//  LhInstance := ShellExecute(Handle,
+//                             'open',
+//                             PChar(LCmdText),
+//                             PChar(LParams),
+//                             nil,
+//                             SW_SHOW);
+////  if LhInstance <= 32 then begin
+////    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
+//
+//end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
