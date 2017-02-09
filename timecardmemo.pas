@@ -109,7 +109,6 @@ var
   LhInstance : Cardinal;
 begin
   wFile := TFileStream.Create('.\\mailtostr.txt', fmOpenRead);
-//  wFile := TFileStream.Create('C:\Users\Tanaka\Documents\Embarcadero\Studio\Projects\timecardmemo\mailtostr.txt', fmOpenRead);
   try
     Memo1.Lines.LoadFromStream(wFile);
     s := Memo1.Lines.Text;
