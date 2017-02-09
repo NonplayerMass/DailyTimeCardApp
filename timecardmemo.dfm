@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = #20986#36864#21220#35352#37682
-  ClientHeight = 110
-  ClientWidth = 303
+  ClientHeight = 180
+  ClientWidth = 413
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -34,7 +34,7 @@ object Form1: TForm1
   end
   object FileNameEdit: TEdit
     Left = 89
-    Top = 70
+    Top = 142
     Width = 121
     Height = 21
     TabOrder = 2
@@ -42,7 +42,7 @@ object Form1: TForm1
   end
   object SaveButton: TButton
     Left = 8
-    Top = 70
+    Top = 142
     Width = 75
     Height = 25
     Caption = 'save'
@@ -65,28 +65,56 @@ object Form1: TForm1
     TabOrder = 5
     Text = '22:00'
   end
-  object AttendanceTimeSyncButton: TButton
+  object DiaryButton: TButton
+    Left = 216
+    Top = 140
+    Width = 75
+    Height = 25
+    Caption = #26085#22577
+    TabOrder = 6
+    OnClick = DiaryButtonClick
+  end
+  object KT1StartButton: TButton
+    Left = 8
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = 'TIME'#65297#38283#22987
+    TabOrder = 7
+    OnClick = KT1StartButtonClick
+  end
+  object KT1EndButton: TButton
+    Left = 8
+    Top = 103
+    Width = 75
+    Height = 25
+    Caption = 'TIME1'#32066#20102
+    TabOrder = 8
+    OnClick = KT1EndButtonClick
+  end
+  object KT1EndEdit: TEdit
+    Left = 89
+    Top = 103
+    Width = 121
+    Height = 21
+    TabOrder = 9
+    Text = '22:00'
+  end
+  object KT1StartEdit: TEdit
+    Left = 89
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 10
+    Text = '08:30'
+  end
+  object Memo1: TMemo
     Left = 216
     Top = 8
-    Width = 75
-    Height = 25
-    Caption = 'TimeSync'
-    TabOrder = 6
-  end
-  object LoadButton: TButton
-    Left = 216
-    Top = 68
-    Width = 75
-    Height = 25
-    Caption = 'load'
-    TabOrder = 7
-  end
-  object TaikinTimeSyncButton: TButton
-    Left = 216
-    Top = 37
-    Width = 75
-    Height = 25
-    Caption = 'TimeSync'
-    TabOrder = 8
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 11
   end
 end

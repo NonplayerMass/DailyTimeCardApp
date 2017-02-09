@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ExtCtrls;
 
 type
 
@@ -15,6 +15,8 @@ type
     startDate: TDateTime;
     endDate: TDateTime;
     nowDate: TDateTime;
+    endTime1Date: TDateTime;
+    startTime1Date: TDateTime;
     function GetStartTime: TDateTime;
     function GetEndTime: TDateTime;
   published
@@ -28,15 +30,23 @@ type
     SaveButton: TButton;
     AttendanceEdit: TEdit;
     TaikinEdit: TEdit;
-    AttendanceTimeSyncButton: TButton;
-    LoadButton: TButton;
-    TaikinTimeSyncButton: TButton;
+    DiaryButton: TButton;
+    KT1StartButton: TButton;
+    KT1EndButton: TButton;
+    KT1EndEdit: TEdit;
+    KT1StartEdit: TEdit;
+    Memo1: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure AttendanceButtonClick(Sender: TObject);
     procedure TaikinButtonClick(Sender: TObject);
     procedure SaveButtonClick(Sender: TObject);
+    procedure AttendanceSyncButtonClick(Sender: TObject);
+    procedure KT1StartButtonClick(Sender: TObject);
+    procedure KT1EndButtonClick(Sender: TObject);
+    procedure DiaryButtonClick(Sender: TObject);
   private
     { Private êÈåæ }
+
   public
     { Public êÈåæ }
     ftimeTime: TDate;
@@ -47,7 +57,12 @@ var
 
 implementation
 
+
+uses
+  ShellAPI;
+
 {$R *.dfm}
+
 
 
 
@@ -69,9 +84,67 @@ begin
   AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
 end;
 
+
+{
+
+http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
+
+  DateTime myDate = DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff",
+                                       System.Globalization.CultureInfo.InvariantCulture)
+}
+
+
+procedure TForm1.AttendanceSyncButtonClick(Sender: TObject);
+begin
+  ftimeTime.startDate := System.SysUtils.GetTime;
+  AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
+end;
+
+procedure TForm1.DiaryButtonClick(Sender: TObject);
+var
+  wFile: TFileStream;
+  s : String;
+  LCmdText   : String;
+  LParams    : String;
+  LhInstance : Cardinal;
+begin
+  wFile := TFileStream.Create('.\\mailtostr.txt', fmOpenRead);
+//  wFile := TFileStream.Create('C:\Users\Tanaka\Documents\Embarcadero\Studio\Projects\timecardmemo\mailtostr.txt', fmOpenRead);
+  try
+    Memo1.Lines.LoadFromStream(wFile);
+    s := Memo1.Lines.Text;
+  finally
+    wFile.Free;
+  end;
+  LCmdText := 'mailto:'+s;
+  LParams  := '';
+
+  LhInstance := ShellExecute(Handle,
+                             'open',
+                             PChar(LCmdText),
+                             PChar(LParams),
+                             nil,
+                             SW_SHOW);
+//  if LhInstance <= 32 then begin
+//    Windows.MessageBox(Handle, 'ãNìÆÇ…é∏îsÇµÇ‹ÇµÇΩ', 'ÉGÉâÅ[', MB_ICONSTOP);
+
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   ftimeTime := TDate.Create(Self);
+end;
+
+procedure TForm1.KT1EndButtonClick(Sender: TObject);
+begin
+  ftimeTime.endTime1Date := System.SysUtils.GetTime;
+  KT1EndEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endTime1Date);
+end;
+
+procedure TForm1.KT1StartButtonClick(Sender: TObject);
+begin
+  ftimeTime.startTime1Date := System.SysUtils.GetTime;
+  KT1StartEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startTime1Date);
 end;
 
 procedure TForm1.SaveButtonClick(Sender: TObject);
@@ -81,6 +154,8 @@ var
 begin
   str := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
   str := str + ',' + FormatDateTime('hh:nn:ss', ftimeTime.endDate);
+  str := str + ',' + FormatDateTime('hh:nn:ss', ftimeTime.startTime1Date);
+  str := str + ',' + FormatDateTime('hh:nn:ss', ftimeTime.endTime1Date);
   path := FormatDateTime('yymmddhhnnss',Now);
   path := path+ '.csv';
 //  path := '.\.txt';
