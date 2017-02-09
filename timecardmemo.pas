@@ -104,6 +104,7 @@ procedure TForm1.DiaryButtonClick(Sender: TObject);
 var
   wFile: TFileStream;
   s : String;
+  sr : String;
   LCmdText   : String;
   LParams    : String;
   LhInstance : Cardinal;
@@ -112,10 +113,13 @@ begin
   try
     Memo1.Lines.LoadFromStream(wFile);
     s := Memo1.Lines.Text;
+    sr := StringReplace(s, '[STARTTIME]', AttendanceEdit.Text, [rfReplaceAll]);
+    sr := StringReplace(sr, '[ENDTIME]', TaikinEdit.Text, [rfReplaceAll]);
+    sr := StringReplace(sr, '[DATE]', FormatDateTime('yyyy/mm/dd',Now), [rfReplaceAll]);
   finally
     wFile.Free;
   end;
-  LCmdText := 'mailto:'+s;
+  LCmdText := 'mailto:'+sr;
   LParams  := '';
 
   LhInstance := ShellExecute(Handle,
