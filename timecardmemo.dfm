@@ -102,7 +102,7 @@ object Form1: TForm1
   end
   object KT1StartEdit: TEdit
     Left = 89
-    Top = 72
+    Top = 70
     Width = 121
     Height = 21
     TabOrder = 10
@@ -117,5 +117,15 @@ object Form1: TForm1
       'Memo1')
     TabOrder = 11
     Visible = False
+  end
+  object TrayIcon1: TTrayIcon
+    OnDblClick = TrayIcon1DblClick
+    Left = 264
+    Top = 104
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnMinimize = ApplicationEvents1Minimize
+    Left = 224
+    Top = 104
   end
 end

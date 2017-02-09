@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ExtCtrls, System.DateUtils;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ExtCtrls, System.DateUtils,
+  Vcl.AppEvnts;
 
 type
 
@@ -36,6 +37,8 @@ type
     KT1EndEdit: TEdit;
     KT1StartEdit: TEdit;
     Memo1: TMemo;
+    TrayIcon1: TTrayIcon;
+    ApplicationEvents1: TApplicationEvents;
     procedure FormCreate(Sender: TObject);
     procedure AttendanceButtonClick(Sender: TObject);
     procedure TaikinButtonClick(Sender: TObject);
@@ -44,7 +47,8 @@ type
     procedure KT1StartButtonClick(Sender: TObject);
     procedure KT1EndButtonClick(Sender: TObject);
     procedure DiaryButtonClick(Sender: TObject);
-//    procedure CreateTaskBarIcon;
+    procedure ApplicationEvents1Minimize(Sender: TObject);
+    procedure TrayIcon1DblClick(Sender: TObject);
   private
     { Private êÈåæ }
 
@@ -177,6 +181,8 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  MyIcon : TIcon;
 begin
   ftimeTime := TDate.Create(Self);
   ftimeTime.startDate := System.SysUtils.GetTime;
@@ -191,8 +197,37 @@ begin
 //
 //  ShowWindow(Application.Handle,SW_HIDE);
 //  Application.ShowMainForm := False;
+  { Load the tray icons. }
+  TrayIcon1.Icons := TImageList.Create(Self);
+////  MyIcon := TIcon.Create;
+////  MyIcon.LoadFromFile('D:\work\prj_timecardapp\DailyTimeCardApp-master\DailyTimeCardApp\icosyukin.ico');
+//  TrayIcon1.Icon.Assign(MyIcon);
+//  TrayIcon1.Icons.AddIcon(MyIcon);
+
+//  MyIcon.LoadFromFile('icons/earth2.ico');
+//  TrayIcon1.Icons.AddIcon(MyIcon);
+//  MyIcon.LoadFromFile('icons/earth3.ico');
+//  TrayIcon1.Icons.AddIcon(MyIcon);
+//  MyIcon.LoadFromFile('icons/earth4.ico');
+//  TrayIcon1.Icons.AddIcon(MyIcon);
+
+  { Set up a hint message and the animation interval. }
+//  TrayIcon1.Hint := 'Hello World!';
+//  TrayIcon1.AnimateInterval := 200;
+//
+//  { Set up a hint balloon. }
+//  TrayIcon1.BalloonTitle := 'Restoring the window.';
+//  TrayIcon1.BalloonHint :=
+//    'Double click the system tray icon to restore the window.';
+//  TrayIcon1.BalloonFlags := bfInfo;
+
+
+    Hide();
+  WindowState := wsMinimized;
+
 
 end;
+
 
 procedure TForm1.KT1EndButtonClick(Sender: TObject);
 begin
@@ -235,6 +270,30 @@ procedure TForm1.TaikinButtonClick(Sender: TObject);
 begin
   ftimeTime.endDate := System.SysUtils.GetTime;
   TaikinEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endDate);
+end;
+
+
+procedure TForm1.TrayIcon1DblClick(Sender: TObject);
+begin
+
+  { Hide the tray icon and show the window,
+  setting its state property to wsNormal. }
+  TrayIcon1.Visible := False;
+  Show();
+  WindowState := wsNormal;
+  Application.BringToFront();
+end;
+
+procedure TForm1.ApplicationEvents1Minimize(Sender: TObject);
+begin
+  { Hide the window and set its state variable to wsMinimized. }
+  Hide();
+  WindowState := wsMinimized;
+
+  { Show the animated tray icon and also a hint balloon. }
+  TrayIcon1.Visible := True;
+  TrayIcon1.Animate := True;
+  TrayIcon1.ShowBalloonHint;
 end;
 
 end.
