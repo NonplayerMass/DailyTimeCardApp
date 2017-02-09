@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = #20986#36864#21220#35352#37682
   ClientHeight = 180
-  ClientWidth = 413
+  ClientWidth = 301
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -79,7 +79,7 @@ object Form1: TForm1
     Top = 72
     Width = 75
     Height = 25
-    Caption = 'TIME'#65297#38283#22987
+    Caption = #20241#25001#38283#22987
     TabOrder = 7
     OnClick = KT1StartButtonClick
   end
@@ -88,7 +88,7 @@ object Form1: TForm1
     Top = 103
     Width = 75
     Height = 25
-    Caption = 'TIME1'#32066#20102
+    Caption = #20241#25001#32066#20102
     TabOrder = 8
     OnClick = KT1EndButtonClick
   end
@@ -111,10 +111,11 @@ object Form1: TForm1
   object Memo1: TMemo
     Left = 216
     Top = 8
-    Width = 185
+    Width = 75
     Height = 89
     Lines.Strings = (
       'Memo1')
     TabOrder = 11
+    Visible = False
   end
 end

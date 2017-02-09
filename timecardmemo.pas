@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ExtCtrls, System.DateUtils;
 
 type
 
@@ -44,6 +44,7 @@ type
     procedure KT1StartButtonClick(Sender: TObject);
     procedure KT1EndButtonClick(Sender: TObject);
     procedure DiaryButtonClick(Sender: TObject);
+//    procedure CreateTaskBarIcon;
   private
     { Private 宣言 }
 
@@ -63,6 +64,43 @@ uses
 
 {$R *.dfm}
 
+
+function GetTimeSa(startTime: TDateTime; endTime: TDateTime): string;
+var
+  sahour: Integer;
+  samin: Integer;
+  sabyou: Integer;
+  min: Integer;
+  sec: Integer;
+begin
+  sahour := HoursBetween(startTime, endTime);
+  samin := MinutesBetween(startTime, endTime);
+  sabyou := SecondsBetween(startTime, endTime);
+  min := samin mod 60;
+  sec := sabyou mod 60;
+  Result := Format('%.2d', [sahour]) + ':' +Format('%.2d', [min])+':'+Format('%.2d', [sec]);
+end;
+
+
+
+function GetTimeSaKyukei(startTime: TDateTime; endTime: TDateTime;
+kstartTime: TDateTime; kendTime: TDateTime
+): string;
+var
+  samin: Integer;
+  ksamin: Integer;
+  hour: Integer;
+  min: Integer;
+//  sec: Integer;
+begin
+  samin := MinutesBetween(startTime, endTime);
+  ksamin := MinutesBetween(kstartTime, kendTime);
+  samin := samin - ksamin;
+  hour := samin div 60;
+  min := samin mod 60;
+//  sec := 0;
+  Result := Format('%.2d', [hour]) + ':' +Format('%.2d', [min]);  //+':'+Format('%.2d', [sec]);
+end;
 
 
 
@@ -94,6 +132,7 @@ http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
 }
 
 
+
 procedure TForm1.AttendanceSyncButtonClick(Sender: TObject);
 begin
   ftimeTime.startDate := System.SysUtils.GetTime;
@@ -116,6 +155,7 @@ begin
     sr := StringReplace(s, '[STARTTIME]', AttendanceEdit.Text, [rfReplaceAll]);
     sr := StringReplace(sr, '[ENDTIME]', TaikinEdit.Text, [rfReplaceAll]);
     sr := StringReplace(sr, '[DATE]', FormatDateTime('yyyy/mm/dd',Now), [rfReplaceAll]);
+    sr := StringReplace(sr, '[SAGYOTIME]', GetTimeSaKyukei(ftimeTime.startDate, ftimeTime.endDate, ftimeTime.startTime1Date, ftimeTime.endTime1Date), [rfReplaceAll]);
   finally
     wFile.Free;
   end;
@@ -128,75 +168,30 @@ begin
                              PChar(LParams),
                              nil,
                              SW_SHOW);
-//  if LhInstance <= 32 then begin
+  if LhInstance <= 32 then
+  begin
+    //TODO
 //    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
+  end;
 
 end;
-
-//procedure TForm1.DiaryButtonClick(Sender: TObject);
-//var
-//  LCmdText   : String;
-//  LParams    : String;
-//  LhInstance : Cardinal;
-//  LBodyText  : String;
-//begin
-//  LBodyText := 'メール新規作成 ? と %26 と改行文字には注意' + '%0D%0A'
-//             + 'サンプルプログラムです';
-//  LCmdText := 'mailto:'+LBodyText;
-//  LParams  := '';
-//
-//  LhInstance := ShellExecute(Handle,
-//                             'open',
-//                             PChar(LCmdText),
-//                             PChar(LParams),
-//                             nil,
-//                             SW_SHOW);
-////  if LhInstance <= 32 then begin
-////    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
-//
-//end;
-
-//procedure TForm1.DiaryButtonClick(Sender: TObject);
-//var
-//  tf : TextFile;
-//  s : String;
-//  ssum : String;
-//  LCmdText   : String;
-//  LParams    : String;
-//  LhInstance : Cardinal;
-//begin
-//  AssignFile(tf, '.\\mailtostr.txt');
-//  Reset(tf);
-//  ssum := '';
-//  s := '';
-//  while not Eof(tf) do
-//  begin
-//    Readln(tf, s);
-//    ssum := ssum + sLineBreak + s;
-//  end;
-////  try
-////    Memo1.Lines.LoadFromStream(wFile);
-////    s := Memo1.Lines.Text;
-////  finally
-////    wFile.Free;
-////  end;
-//  LCmdText := 'mailto:'+ssum;
-//  LParams  := '';
-//
-//  LhInstance := ShellExecute(Handle,
-//                             'open',
-//                             PChar(LCmdText),
-//                             PChar(LParams),
-//                             nil,
-//                             SW_SHOW);
-////  if LhInstance <= 32 then begin
-////    Windows.MessageBox(Handle, '起動に失敗しました', 'エラー', MB_ICONSTOP);
-//
-//end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   ftimeTime := TDate.Create(Self);
+  ftimeTime.startDate := System.SysUtils.GetTime;
+  ftimeTime.endDate := System.SysUtils.GetTime;
+  ftimeTime.startTime1Date := System.SysUtils.GetTime;
+  ftimeTime.endTime1Date := System.DateUtils.IncHour(Now, 1);
+  TaikinEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endDate);
+  AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
+  KT1StartEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startTime1Date);
+  KT1EndEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endTime1Date);
+
+//
+//  ShowWindow(Application.Handle,SW_HIDE);
+//  Application.ShowMainForm := False;
+
 end;
 
 procedure TForm1.KT1EndButtonClick(Sender: TObject);
@@ -209,6 +204,9 @@ procedure TForm1.KT1StartButtonClick(Sender: TObject);
 begin
   ftimeTime.startTime1Date := System.SysUtils.GetTime;
   KT1StartEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startTime1Date);
+
+  ftimeTime.endTime1Date := System.DateUtils.IncHour(Now, 1);
+  KT1EndEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endTime1Date);
 end;
 
 procedure TForm1.SaveButtonClick(Sender: TObject);
