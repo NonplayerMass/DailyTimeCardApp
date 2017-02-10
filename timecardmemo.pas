@@ -107,6 +107,29 @@ begin
 end;
 
 
+function GetTimeSagyo19(endTime: TDateTime): string;
+var
+  date19time: TDateTime;
+  samin: Integer;
+  ksamin: Integer;
+  hour: Integer;
+  min: Integer;
+begin
+  date19time := System.SysUtils.EncodeTime(19, 0,0,0);
+  if HourOf(System.SysUtils.Time) < 19 then
+  begin
+    Result := '00:00';
+    Exit;
+  end;
+
+  samin := MinutesBetween(date19time, endTime);
+  hour := samin div 60;
+  min := samin mod 60;
+//  sec := 0;
+  Result := Format('%.2d', [hour]) + ':' +Format('%.2d', [min]);  //+':'+Format('%.2d', [sec]);
+end;
+
+
 
 function TDate.GetStartTime: TDateTime;
 begin
@@ -160,6 +183,9 @@ begin
     sr := StringReplace(sr, '[ENDTIME]', TaikinEdit.Text, [rfReplaceAll]);
     sr := StringReplace(sr, '[DATE]', FormatDateTime('yyyy/mm/dd',Now), [rfReplaceAll]);
     sr := StringReplace(sr, '[SAGYOTIME]', GetTimeSaKyukei(ftimeTime.startDate, ftimeTime.endDate, ftimeTime.startTime1Date, ftimeTime.endTime1Date), [rfReplaceAll]);
+    sr := StringReplace(sr, '[SAGYO19TIME]', GetTimeSagyo19(ftimeTime.endDate), [rfReplaceAll]);
+    sr := StringReplace(sr, '[KYUKEISTARTTIME]', KT1StartEdit.Text, [rfReplaceAll]);
+    sr := StringReplace(sr, '[KYUKEIENDTIME]', KT1EndEdit.Text, [rfReplaceAll]);
   finally
     wFile.Free;
   end;

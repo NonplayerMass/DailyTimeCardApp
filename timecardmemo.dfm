@@ -39,6 +39,7 @@ object Form1: TForm1
     Height = 21
     TabOrder = 2
     Text = 'date201702021240.csv'
+    Visible = False
   end
   object SaveButton: TButton
     Left = 8
