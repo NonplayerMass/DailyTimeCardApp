@@ -211,9 +211,9 @@ var
   MyIcon : TIcon;
 begin
   ftimeTime := TDate.Create(Self);
-  ftimeTime.startDate := System.SysUtils.GetTime;
-  ftimeTime.endDate := System.SysUtils.GetTime;
-  ftimeTime.startTime1Date := System.SysUtils.GetTime;
+  ftimeTime.startDate := System.SysUtils.Now;
+  ftimeTime.endDate := System.SysUtils.Now;
+  ftimeTime.startTime1Date := System.SysUtils.Now;
   ftimeTime.endTime1Date := System.DateUtils.IncHour(Now, 1);
   TaikinEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endDate);
   AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
