@@ -115,8 +115,11 @@ var
   hour: Integer;
   min: Integer;
 begin
-  date19time := System.SysUtils.EncodeTime(19, 0,0,0);
-  if HourOf(System.SysUtils.Time) < 19 then
+  date19time := System.SysUtils.Now;
+  date19time := System.DateUtils.RecodeHour(date19time, 19);
+  date19time := System.DateUtils.RecodeMinute(date19time, 0);
+  date19time := System.DateUtils.RecodeSecond(date19time, 0);
+  if HourOf(date19time) < 19 then
   begin
     Result := '00:00';
     Exit;
@@ -145,7 +148,7 @@ end;
 
 procedure TForm1.AttendanceButtonClick(Sender: TObject);
 begin
-  ftimeTime.startDate := System.SysUtils.GetTime;
+  ftimeTime.startDate := System.SysUtils.Now;
   AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
 end;
 
@@ -162,7 +165,7 @@ http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
 
 procedure TForm1.AttendanceSyncButtonClick(Sender: TObject);
 begin
-  ftimeTime.startDate := System.SysUtils.GetTime;
+  ftimeTime.startDate := System.SysUtils.Now;
   AttendanceEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startDate);
 end;
 //
@@ -257,13 +260,13 @@ end;
 
 procedure TForm1.KT1EndButtonClick(Sender: TObject);
 begin
-  ftimeTime.endTime1Date := System.SysUtils.GetTime;
+  ftimeTime.endTime1Date := System.SysUtils.Now;
   KT1EndEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endTime1Date);
 end;
 
 procedure TForm1.KT1StartButtonClick(Sender: TObject);
 begin
-  ftimeTime.startTime1Date := System.SysUtils.GetTime;
+  ftimeTime.startTime1Date := System.SysUtils.Now;
   KT1StartEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.startTime1Date);
 
   ftimeTime.endTime1Date := System.DateUtils.IncHour(Now, 1);
@@ -294,7 +297,7 @@ end;
 
 procedure TForm1.TaikinButtonClick(Sender: TObject);
 begin
-  ftimeTime.endDate := System.SysUtils.GetTime;
+  ftimeTime.endDate := System.SysUtils.Now;
   TaikinEdit.Text := FormatDateTime('hh:nn:ss', ftimeTime.endDate);
 end;
 
